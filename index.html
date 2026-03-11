@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="E-file your taxes online quickly and safely with e-file.com. Use our trusted affiliate link to file taxes easily.">
+    <meta name="keywords" content="efile, taxes, tax filing, online tax return, IRS">
+    <meta name="robots" content="index, follow">
+    <title>File Your Taxes Online | E-file.com</title>
+    <link rel="canonical" href="https://yourusername.github.io/efile-site/">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; line-height: 1.6; background: #f5f5f5; }
+        header { background: #0073e6; color: white; padding: 20px 0; text-align: center; }
+        main { max-width: 800px; margin: 20px auto; background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        a.button { display: inline-block; padding: 10px 20px; margin: 10px 0; background: #0073e6; color: white; text-decoration: none; border-radius: 5px; }
+        footer { background: #333; color: white; text-align: center; padding: 10px 0; margin-top: 20px; }
+        footer a { color: #00bfff; text-decoration: none; margin: 0 5px; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>File Your Taxes Online with E-file.com</h1>
+        <p id="currentDate"></p>
+    </header>
+    <main>
+        <h2>Fast, Safe, and Secure Tax Filing</h2>
+        <p>E-file your taxes quickly from the comfort of your home. Our trusted partner, <strong>e-file.com</strong>, makes filing simple and secure.</p>
+
+        <!-- Affiliate Link Section -->
+        <div style="text-align:center; margin:20px 0;">
+            <a href="https://www.linkconnector.com/ta.php?lc=007949000010005142&lc_pid=Promo-5810&url=&atid=TaxFilingWeb" id="affiliateLink" target="_blank">
+                <img src="https://www.e-file.com/images/efile-banner.png" alt="E-file.com Tax Filing" style="width:100%; max-width:600px; border:0;">
+            </a>
+        </div>
+
+        <a class="button" href="https://www.linkconnector.com/ta.php?lc=007949000010005142&lc_pid=Promo-5810&url=&atid=TaxFilingWeb" id="startFilingButton" target="_blank">
+            Start Filing Taxes Now
+        </a>
+    </main>
+    <footer>
+        <p>
+            <a href="https://www.linkconnector.com/ta.php?lc=007949000010005142&lc_pid=Promo-5810&url=&atid=TaxFilingWeb" id="contactUs" target="_blank">Contact Us</a> |
+            <a href="https://www.e-file.com/privacy-policy.php" id="privacyPolicy" target="_blank">Privacy Policy</a>
+        </p>
+        <p>&copy; <span id="year"></span> E-file.com</p>
+    </footer>
+
+    <script>
+        // Insert current date at the top
+        const today = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('currentDate').innerText = today.toLocaleDateString(undefined, options);
+
+        // Insert current year in footer
+        document.getElementById('year').innerText = today.getFullYear();
+    </script>
+</body>
+</html>
