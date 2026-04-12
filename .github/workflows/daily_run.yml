@@ -1,50 +1,38 @@
-name: Chameleon Expansion
-
+name: SkyScanner Auto-Propulsion
 on:
-  schedule:
-    - cron: '0 */6 * * *' 
-  workflow_dispatch:      
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Added this to silence the Node.js 20 deprecation warning
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Added explicit permissions to ensure the GITHUB_TOKEN can push code
     permissions:
-      contents: write
-    
+      contents: write # This gives GitHub permission to save the files it creates
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - name: Checkout Repository
+        uses: actions/checkout@v4.2.2 # Specifically the Node 24 compatible patch
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.1.0 # Specifically the Node 24 compatible patch
         with:
-          python-version: '3.11'
+          node-version: '20' # Your engine still runs on 20, which is fine
 
-      - name: Install Dependencies
+      - name: Create Required Folders
+        run: mkdir -p states blog # Keeps your folder logic safe
+
+      - name: Run SkyScanner Engine
+        run: node generate.js
+
+      - name: Commit and Push Changes
         run: |
-          python -m pip install --upgrade pip
-          pip install requests PyGithub
-
-      - name: Run Monster Expansion
-        env:
-          CHAMELEON_TOKEN: ${{ secrets.CHAMELEON_TOKEN }}
-        # Added a check to ensure the script exists before running
-        run: |
-          if [ -f master_expander.py ]; then
-            python master_expander.py
-          else
-            echo "Error: master_expander.py not found!"
-            exit 1
-          fi
-
-      - name: Commit and Push
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Automated Authority Update [skip ci]"
-          branch: main
-          # This prevents the action from failing if the script made no changes
-          skip_dirty_check: false 
-          commit_options: '--no-verify'
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Auto-generated state and blog pages [Skip CI]" || exit 0
+          git push
