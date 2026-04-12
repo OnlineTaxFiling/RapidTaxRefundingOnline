@@ -7,13 +7,7 @@ TARGET_FILE = "index.html"
 AFFILIATE_URL = "https://www.linkconnector.com/ta.php?lc=007949054186005142&atid=RapidTaxForever"
 
 def run_automation():
-    # 1. FORCE FILE EXISTENCE
-    # If the file doesn't exist, create a clean one so the script doesn't crash
-    if not os.path.exists(TARGET_FILE):
-        with open(TARGET_FILE, "w", encoding="utf-8") as f:
-            f.write("<!DOCTYPE html><html><head><title>Tax Prep 2026</title></head><body></body></html>")
-
-    # 2. KEYWORD PICKER
+    # 1. GET KEYWORD (Only read keywords.json)
     kw = "2026 Tax Filing Update"
     if os.path.exists('keywords.json'):
         try:
@@ -23,34 +17,62 @@ def run_automation():
                     kw = data['remaining'].pop(0)
                     data.setdefault('used', []).append(kw)
                     f.seek(0); json.dump(data, f, indent=2); f.truncate()
-        except: pass
+        except:
+            pass # Use default if JSON fails
 
-    # 3. CONTENT GENERATION
-    content = f"""
-    <div style="border:2px solid #0044cc; padding:30px; margin:20px; font-family:sans-serif;">
-        <h2 style="color:#0044cc;">{kw}</h2>
-        <p><strong>Verified:</strong> {datetime.now().strftime('%B %d, %Y')}</p>
-        <p>Official 2026 processing for {kw} is now active. Use the secure gateway to ensure your refund is authorized within the 24-hour rapid window.</p>
-        <a href="{AFFILIATE_URL}" style="background:#0044cc; color:white; padding:15px; text-decoration:none; font-weight:bold; border-radius:5px; display:inline-block; margin-top:10px;">START REFUND NOW →</a>
+    # 2. DEFINE THE ENTIRE PAGE STRUCTURE
+    # We write the WHOLE file so we don't have to "read" or "find" markers
+    full_html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{kw} | 2026 Rapid Tax Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans">
+    <div class="max-w-4xl mx-auto py-20 px-6">
+        <header class="mb-12 border-b pb-8">
+            <h1 class="text-4xl font-black text-blue-900 uppercase tracking-tighter italic">OnlineTaxFiling</h1>
+            <p class="text-slate-500 font-bold uppercase text-xs tracking-widest mt-2">Authorized 2026 Disbursement Gateway</p>
+        </header>
+
+        <main>
+            <article class="bg-white p-10 rounded-[40px] shadow-2xl border border-slate-200">
+                <div class="inline-block bg-blue-600 text-white text-[10px] font-black px-4 py-1 rounded-full mb-6 uppercase">
+                    System Verified: {datetime.now().strftime('%B %d, %Y')}
+                </div>
+                
+                <h2 class="text-4xl md:text-6xl font-black text-slate-900 mb-6 leading-none tracking-tight">
+                    {kw}
+                </h2>
+                
+                <p class="text-xl text-slate-600 mb-8 leading-relaxed">
+                    Official 2026 processing for <strong>{kw}</strong> is now live. Secure your spot in the rapid-refund queue to ensure your federal and state credits are authorized within 24 hours.
+                </p>
+
+                <div class="bg-slate-900 p-8 rounded-3xl text-center shadow-xl">
+                    <h3 class="text-white font-bold text-xl mb-6">Ready to authorize your 2026 refund?</h3>
+                    <a href="{AFFILIATE_URL}" class="inline-block bg-green-500 hover:bg-green-600 text-white text-2xl font-black py-6 px-12 rounded-2xl transition-all hover:scale-105 active:scale-95 shadow-lg">
+                        START FILING NOW →
+                    </a>
+                    <p class="text-slate-400 text-xs mt-6 font-medium uppercase tracking-widest">Safe • Secure • 256-bit Encrypted</p>
+                </div>
+            </article>
+        </main>
+
+        <footer class="mt-20 text-center text-slate-400 text-sm font-medium">
+            &copy; 2026 OnlineTaxFiling Authority Portal. All rights reserved.
+        </footer>
     </div>
-    """
+</body>
+</html>"""
 
-    # 4. INJECTION (Simple & Safe)
-    with open(TARGET_FILE, "r", encoding="utf-8") as f:
-        html = f.read()
-    
-    # We look for the SEO marker, but if it's missing, we just shove it in the body
-    if "" in html:
-        new_html = html.replace("", "" + content)
-    elif "</body>" in html:
-        new_html = html.replace("</body>", content + "</body>")
-    else:
-        new_html = html + content # Last resort
-
+    # 3. OVERWRITE THE FILE (No reading allowed)
     with open(TARGET_FILE, "w", encoding="utf-8") as f:
-        f.write(new_html)
+        f.write(full_html)
     
-    print(f"Success: Deployed {kw}")
+    print(f"Success: Forced Rebuild for {kw}")
 
 if __name__ == "__main__":
     run_automation()
