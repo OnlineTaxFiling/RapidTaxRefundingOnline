@@ -5,16 +5,15 @@ from datetime import datetime
 # --- CONFIG ---
 TARGET_FILE = "index.html"
 AFFILIATE_URL = "https://www.linkconnector.com/ta.php?lc=007949054186005142&atid=RapidTaxForever"
-# The specific marker you need in your index.html
-SEO_MARKER = ""
 
 def run_automation():
-    # 1. Self-Heal: Create index.html if missing or empty
-    if not os.path.exists(TARGET_FILE) or os.stat(TARGET_FILE).st_size == 0:
+    # 1. FORCE FILE EXISTENCE
+    # If the file doesn't exist, create a clean one so the script doesn't crash
+    if not os.path.exists(TARGET_FILE):
         with open(TARGET_FILE, "w", encoding="utf-8") as f:
-            f.write(f"<!DOCTYPE html>\n<html>\n<body>\n{SEO_MARKER}\n</body>\n</html>")
+            f.write("<!DOCTYPE html><html><head><title>Tax Prep 2026</title></head><body></body></html>")
 
-    # 2. Keyword Handling
+    # 2. KEYWORD PICKER
     kw = "2026 Tax Filing Update"
     if os.path.exists('keywords.json'):
         try:
@@ -23,47 +22,35 @@ def run_automation():
                 if data.get('remaining'):
                     kw = data['remaining'].pop(0)
                     data.setdefault('used', []).append(kw)
-                    f.seek(0)
-                    json.dump(data, f, indent=2)
-                    f.truncate()
-        except Exception as e:
-            print(f"Keyword error: {e}")
+                    f.seek(0); json.dump(data, f, indent=2); f.truncate()
+        except: pass
 
-    # 3. Content Injection
+    # 3. CONTENT GENERATION
+    content = f"""
+    <div style="border:2px solid #0044cc; padding:30px; margin:20px; font-family:sans-serif;">
+        <h2 style="color:#0044cc;">{kw}</h2>
+        <p><strong>Verified:</strong> {datetime.now().strftime('%B %d, %Y')}</p>
+        <p>Official 2026 processing for {kw} is now active. Use the secure gateway to ensure your refund is authorized within the 24-hour rapid window.</p>
+        <a href="{AFFILIATE_URL}" style="background:#0044cc; color:white; padding:15px; text-decoration:none; font-weight:bold; border-radius:5px; display:inline-block; margin-top:10px;">START REFUND NOW →</a>
+    </div>
+    """
+
+    # 4. INJECTION (Simple & Safe)
     with open(TARGET_FILE, "r", encoding="utf-8") as f:
         html = f.read()
     
-    # Build the high-authority block
-    content = f"""
-    <article style="border:1px solid #ddd; padding:40px; margin:20px; font-family:sans-serif; line-height:1.6;">
-        <h2 style="color:#0044cc; font-size:28px;">{kw}: 2026 Official Filing Guidance</h2>
-        <p><strong>Verified Update:</strong> {datetime.now().strftime('%B %d, %Y')}</p>
-        <p>To ensure compliance with the 2026 rapid-refund mandate, users processing <em>{kw}</em> 
-        should utilize the secure portal below. This prevents manual review delays and 
-        accelerates the electronic disbursement of federal and state credits.</p>
-        <div style="margin:30px 0;">
-            <a href="{AFFILIATE_URL}" style="background:#0044cc; color:white; padding:18px 30px; text-decoration:none; font-weight:bold; border-radius:8px; font-size:20px;">START REFUND AUTHORIZATION →</a>
-        </div>
-        <p style="font-size:12px; color:#666;">Standard 24-hour processing applies to all {kw} submissions via this gateway.</p>
-    </article>
-    """
-    
-    # 4. Logical Injection
-    if SEO_MARKER in html:
-        # Inject right after the marker
-        new_html = html.replace(SEO_MARKER, SEO_MARKER + "\n" + content)
-        print(f"Success: Injected after SEO Marker for {kw}")
+    # We look for the SEO marker, but if it's missing, we just shove it in the body
+    if "" in html:
+        new_html = html.replace("", "" + content)
     elif "</body>" in html:
-        # Fallback: Inject before closing body tag
-        new_html = html.replace("</body>", content + "\n</body>")
-        print(f"Success: Injected before </body> for {kw}")
+        new_html = html.replace("</body>", content + "</body>")
     else:
-        # Last resort: Append to end
-        new_html = html + "\n" + content
-        print(f"Success: Appended to end of file for {kw}")
+        new_html = html + content # Last resort
 
     with open(TARGET_FILE, "w", encoding="utf-8") as f:
         f.write(new_html)
+    
+    print(f"Success: Deployed {kw}")
 
 if __name__ == "__main__":
     run_automation()
