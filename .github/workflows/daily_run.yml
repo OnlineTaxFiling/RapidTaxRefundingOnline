@@ -1,36 +1,19 @@
 name: Chameleon Expansion
-on:
-  schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
-
+on: [workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      - name: Install Dependencies
-        run: |
-          pip install requests PyGithub
-          # Verify files exist so the script doesn't crash
-          ls -la 
-
-      - name: Run Monster Expansion
+      - name: Run Script
         env:
           CHAMELEON_TOKEN: ${{ secrets.CHAMELEON_TOKEN }}
         run: python master_expander.py
-
-      - name: Commit and Push
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Tax season push: $(date)"
-          branch: main
+          commit_message: "Debug Push"
