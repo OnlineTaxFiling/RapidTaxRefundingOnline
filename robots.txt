@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Direct links to your auto-generated sitemaps
+Sitemap: https://brightlane.github.io/sitemap.xml
+
+# Freshness signal for crawlers
+# Last Sitemap Update: 2026-04-12
