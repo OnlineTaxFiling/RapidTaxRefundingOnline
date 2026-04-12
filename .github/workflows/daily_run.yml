@@ -1,6 +1,9 @@
 name: Chameleon Expansion
 on: [workflow_dispatch]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # ← add this
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,7 +21,10 @@ jobs:
       - name: Run Script
         run: python master_expander.py
 
+      - name: Set commit date
+        run: echo "COMMIT_DATE=$(date)" >> $GITHUB_ENV
+
       - name: Commit
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Tax Season Authority Push: $(date)"
+          commit_message: "Tax Season Authority Push: ${{ env.COMMIT_DATE }}"
