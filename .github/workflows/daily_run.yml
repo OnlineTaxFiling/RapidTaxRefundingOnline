@@ -1,12 +1,8 @@
 name: Chameleon Expansion
 on:
   schedule:
-    # Runs every 6 hours to maximize "Freshness" for the April 15 deadline
     - cron: '0 */6 * * *' 
-  workflow_dispatch:      # Allows you to trigger a "Monster Update" manually
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  workflow_dispatch:      
 
 jobs:
   build:
@@ -16,6 +12,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        # fetch-depth 0 is key for the auto-commit to work smoothly
         with:
           fetch-depth: 0
 
@@ -29,7 +26,6 @@ jobs:
 
       - name: Run Monster Expansion
         env:
-          # Required for the script to push content to your other repos
           CHAMELEON_TOKEN: ${{ secrets.CHAMELEON_TOKEN }}
         run: python master_expander.py
 
