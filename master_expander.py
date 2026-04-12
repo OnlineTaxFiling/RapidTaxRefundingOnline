@@ -1,16 +1,42 @@
 import os
 import json
 import requests
+import random
 from datetime import datetime
 
-# --- CONFIGURATION (THE HEART OF THE MACHINE) ---
+# --- 1. CONFIGURATION ---
+# Your fixed affiliate heartbeat
 AFFILIATE_BASE = "https://www.linkconnector.com/ta.php?lc=007949054186005142"
-TRACKING_ID = "RapidTaxRoot"
+TRACKING_ID = "RapidTaxForever"
 TARGET_FILE = "index.html"
 SITEMAP_FILE = "sitemap.xml"
 
+# --- 2. THE KNOWLEDGE BASE (THE "FRESHNESS" ENGINE) ---
+# The bot pulls from these to ensure content isn't just "keyword stuffing"
+TAX_LAWS_2026 = [
+    "the new OBBB 24-hour rapid refund mandate for digital filers",
+    "updated standard deductions for independent contractors under the 2026 Act",
+    "new audit-flags for digital currency transactions and overseas assets",
+    "the emergency filing extension protocols for high-volume 2026 traffic",
+    "Section 402(b) compliance regarding automated refund routing"
+]
+
+TAX_LAWS_2027_PREVIEW = [
+    "early directives for the 2027 season indicating a shift toward AI-verified filing",
+    "proposed increases in child tax credits for the upcoming 2027 fiscal cycle",
+    "new electronic signature requirements taking effect after December 31st",
+    "the 2027 'Smart-File' initiative for multi-state income earners"
+]
+
+def get_dynamic_law():
+    """Pivots the content based on the calendar to stay relevant forever."""
+    month = datetime.now().month
+    if month > 9: # From October to December, start focusing on NEXT year
+        return random.choice(TAX_LAWS_2027_PREVIEW)
+    return random.choice(TAX_LAWS_2026)
+
+# --- 3. CORE LOGIC ---
 def get_next_keyword():
-    """Pulls the next topic from your tank and moves it to used."""
     if not os.path.exists('keywords.json'):
         return None
     with open('keywords.json', 'r+') as f:
@@ -19,56 +45,50 @@ def get_next_keyword():
             return None
         kw = data['remaining'].pop(0)
         data.setdefault('used', []).append(kw)
-        f.seek(0)
-        json.dump(data, f, indent=2)
-        f.truncate()
+        f.seek(0); json.dump(data, f, indent=2); f.truncate()
     return kw
 
-def build_authority_block(kw):
-    """Generates a high-authority, styled 2,500-word content block."""
+def build_monster_block(kw):
+    law_snippet = get_dynamic_law()
     full_url = f"{AFFILIATE_BASE}&atid={TRACKING_ID}"
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M")
+    timestamp = datetime.now().strftime("%B %d, %Y")
     
     return f"""
-    <article class="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-slate-200 mb-12 animate-fade-in">
-        <div class="flex items-center space-x-2 mb-6">
-            <span class="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded">2026 EXPERT ANALYSIS</span>
-            <span class="text-slate-400 text-xs">Verified: {timestamp}</span>
+    <article class="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-slate-200 mb-12 transform transition hover:shadow-md">
+        <div class="flex items-center space-x-3 mb-6">
+            <span class="bg-blue-600 text-white text-xs font-black px-3 py-1 rounded-full uppercase">Update: {timestamp}</span>
+            <span class="text-slate-400 text-xs font-bold uppercase tracking-widest border-l pl-3">OBBB Verified</span>
         </div>
         
-        <h2 class="text-3xl md:text-4xl font-black text-blue-900 mb-6 leading-tight">
-            {kw}: Navigating the 2026 OBBB Tax Framework
+        <h2 class="text-3xl md:text-5xl font-black text-blue-900 mb-6 leading-tight">
+            {kw}: Critical 2026 Filing Analysis
         </h2>
         
-        <div class="prose prose-slate lg:prose-xl max-w-none text-slate-600 leading-relaxed space-y-6">
-            <p class="text-xl font-medium text-slate-800">
-                The strategic implementation of <strong>{kw}</strong> is now a critical component of the 2026 filing cycle. 
-                As the April 15th deadline approaches, taxpayers must ensure their data aligns with the latest 
-                IRS-authorized protocols to prevent automated refund freezes.
+        <div class="prose prose-slate max-w-none text-slate-600 text-lg leading-relaxed">
+            <p class="mb-6">
+                Navigating <strong>{kw}</strong> requires a deep understanding of current federal mandates. 
+                As of {timestamp}, our internal audit systems have flagged <strong>{kw}</strong> as a 
+                priority category for high-speed refund processing.
             </p>
             
-            <h3 class="text-2xl font-bold text-blue-800">Why {kw} Matters for Your 2026 Refund</h3>
-            <p>
-                Recent updates to the 2026 digital filing act have introduced specific audit-triggers related to 
-                {kw}. To maintain OBBB compliance, our data suggests that direct-file users see a 40% reduction 
-                in processing delays when utilizing secure partner channels.
-            </p>
-
-            <div class="my-10 p-8 bg-blue-50 border-2 border-dashed border-blue-200 rounded-2xl text-center">
-                <h4 class="text-xl font-bold text-blue-900 mb-4 tracking-tight uppercase">Authorized e-File Action Required</h4>
-                <p class="mb-6">Resolve all {kw} inconsistencies and transmit your 2026 return instantly.</p>
-                <a href="{full_url}" class="inline-block bg-blue-600 text-white font-black py-4 px-10 rounded-xl hover:bg-blue-700 shadow-xl transition-all">
-                    PROCEED TO SECURE FILING PORTAL →
-                </a>
+            <div class="my-8 p-6 bg-blue-50 border-l-8 border-blue-600 rounded-r-xl italic font-medium text-blue-900">
+                "Technical Directive: Implementation of {law_snippet} is now required for all 2026 submissions 
+                to ensure same-day verification and deposit."
             </div>
 
-            <h3 class="text-2xl font-bold text-blue-800">The 2,500-Word Compliance Checklist</h3>
-            <ul class="grid md:grid-cols-2 gap-4 list-none p-0">
-                <li class="bg-slate-50 p-4 rounded-lg border-l-4 border-green-500"><strong>Phase 1:</strong> Initial {kw} Data Validation</li>
-                <li class="bg-slate-50 p-4 rounded-lg border-l-4 border-green-500"><strong>Phase 2:</strong> OBBB Credit Synchronization</li>
-                <li class="bg-slate-50 p-4 rounded-lg border-l-4 border-green-500"><strong>Phase 3:</strong> Automated Audit-Flag Screening</li>
-                <li class="bg-slate-50 p-4 rounded-lg border-l-4 border-green-500"><strong>Phase 4:</strong> Instant Direct-Deposit Routing</li>
-            </ul>
+            <p class="mb-8">
+                By focusing on {kw}, filers can bypass traditional manual review queues. Our direct-file 
+                infrastructure is pre-loaded with the specific logic for {law_snippet}, allowing 
+                your data to move directly to the refund authorization stage.
+            </p>
+
+            <div class="text-center bg-slate-900 p-8 rounded-2xl shadow-2xl">
+                <h3 class="text-white text-2xl font-bold mb-4 uppercase tracking-tighter">Authorized {kw} Submission Portal</h3>
+                <p class="text-slate-400 mb-8">Click below to transmit your 2026 return via the Rapid Refund Network.</p>
+                <a href="{full_url}" class="inline-block bg-green-500 hover:bg-green-600 text-white text-2xl font-black py-5 px-12 rounded-xl transition transform hover:scale-105">
+                    FILE FOR {kw.upper()} NOW →
+                </a>
+            </div>
         </div>
     </article>
     """
@@ -76,36 +96,33 @@ def build_authority_block(kw):
 def run_automation():
     kw = get_next_keyword()
     if not kw:
-        print("Tank empty. Add more keywords to keywords.json to keep running.")
-        return
+        print("Tank empty. Add more keywords to keywords.json."); return
 
-    # 1. Inject Content into index.html
-    new_content = build_authority_block(kw)
+    new_content = build_monster_block(kw)
+    
+    # Update HTML Hub
     with open(TARGET_FILE, "r", encoding="utf-8") as f:
         html = f.read()
     
     marker = ''
     if marker in html:
-        # Puts the newest content at the TOP of the feed
+        # We inject the NEWEST content at the top so users (and Google) see it first
         updated_html = html.replace(marker, marker + "\n" + new_content)
         with open(TARGET_FILE, "w", encoding="utf-8") as f:
             f.write(updated_html)
     
-    # 2. Update Sitemap for Google
+    # Update Sitemap for Freshness
     now = datetime.now().strftime("%Y-%m-%d")
-    sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.1">
-  <url><loc>https://brightlane.github.io/</loc><lastmod>{now}</lastmod><priority>1.0</priority></url>
-</urlset>"""
+    sitemap = f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.1"><url><loc>https://brightlane.github.io/</loc><lastmod>{now}</lastmod><priority>1.0</priority></url></urlset>'
     with open(SITEMAP_FILE, "w") as f:
-        f.write(sitemap_content)
+        f.write(sitemap)
 
-    # 3. Ping Google & Bing
+    # Emergency Pings
     sitemap_url = "https://brightlane.github.io/sitemap.xml"
     requests.get(f"https://www.google.com/ping?sitemap={sitemap_url}")
     requests.get(f"https://www.bing.com/ping?sitemap={sitemap_url}")
     
-    print(f"✅ Forever-Update Successful: {kw}")
+    print(f"✅ Success: {kw} injected with law rotation.")
 
 if __name__ == "__main__":
     run_automation()
