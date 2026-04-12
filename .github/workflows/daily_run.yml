@@ -10,7 +10,7 @@ jobs:
     permissions:
       contents: write
     
-    # This ensures the runner and all actions operate on the Node 24 engine
+    # This is the "Secret Sauce" that makes Node 24 work on GitHub Actions
     env:
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -36,5 +36,5 @@ jobs:
       - name: Commit and Push
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "System Update: Node 24 Content Push $(date)"
+          commit_message: "Automated Authority Update (Forced Node 24) $(date)"
           branch: main
