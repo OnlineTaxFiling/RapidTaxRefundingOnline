@@ -1,8 +1,8 @@
 name: Chameleon Expansion
 on:
   schedule:
-    - cron: '0 */6 * * *' 
-  workflow_dispatch:      
+    - cron: '0 */6 * * *' # Runs every 6 hours automatically
+  workflow_dispatch:      # Allows you to click a button to run it manually
 
 jobs:
   build:
@@ -12,7 +12,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        # fetch-depth 0 is key for the auto-commit to work smoothly
         with:
           fetch-depth: 0
 
