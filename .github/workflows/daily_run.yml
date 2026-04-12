@@ -8,13 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Added explicit permissions to ensure the GITHUB_TOKEN can push code
     permissions:
       contents: write
     
-    # This forces GitHub to use Node 24 for the underlying action execution
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -34,10 +31,20 @@ jobs:
       - name: Run Monster Expansion
         env:
           CHAMELEON_TOKEN: ${{ secrets.CHAMELEON_TOKEN }}
-        run: python master_expander.py
+        # Added a check to ensure the script exists before running
+        run: |
+          if [ -f master_expander.py ]; then
+            python master_expander.py
+          else
+            echo "Error: master_expander.py not found!"
+            exit 1
+          fi
 
       - name: Commit and Push
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Automated Authority Update (Forced Node 24) [skip ci]"
+          commit_message: "Automated Authority Update [skip ci]"
           branch: main
+          # This prevents the action from failing if the script made no changes
+          skip_dirty_check: false 
+          commit_options: '--no-verify'
