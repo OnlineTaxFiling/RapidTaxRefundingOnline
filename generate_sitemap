@@ -1,0 +1,21 @@
+def update_sitemap():
+    """Generates a fresh sitemap with today's date to force Google to re-crawl"""
+    now = datetime.datetime.now().strftime("%Y-%m-%d")
+    sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.1">
+  <url>
+    <loc>https://brightlane.github.io/</loc>
+    <lastmod>{now}</lastmod>
+    <changefreq>hourly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>"""
+    
+    with open("sitemap.xml", "w") as f:
+        f.write(sitemap_content)
+    print("🚀 Sitemap updated with fresh timestamp!")
+
+# Add 'update_sitemap()' to your main execution block
+if __name__ == "__main__":
+    update_root()
+    update_sitemap()
