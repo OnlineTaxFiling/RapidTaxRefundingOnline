@@ -4,15 +4,14 @@ import requests
 import random
 from datetime import datetime
 
-# --- 1. CONFIGURATION ---
-# Your fixed affiliate heartbeat
+# --- 1. CORE CONFIGURATION ---
+# Your fixed LinkConnector heartbeat
 AFFILIATE_BASE = "https://www.linkconnector.com/ta.php?lc=007949054186005142"
-TRACKING_ID = "RapidTaxForever"
+TRACKING_ID = "RapidTaxForever" 
 TARGET_FILE = "index.html"
 SITEMAP_FILE = "sitemap.xml"
 
-# --- 2. THE KNOWLEDGE BASE (THE "FRESHNESS" ENGINE) ---
-# The bot pulls from these to ensure content isn't just "keyword stuffing"
+# --- 2. THE DYNAMIC KNOWLEDGE BASE (LAW ROTATION) ---
 TAX_LAWS_2026 = [
     "the new OBBB 24-hour rapid refund mandate for digital filers",
     "updated standard deductions for independent contractors under the 2026 Act",
@@ -29,23 +28,31 @@ TAX_LAWS_2027_PREVIEW = [
 ]
 
 def get_dynamic_law():
-    """Pivots the content based on the calendar to stay relevant forever."""
+    """Pivots content based on the calendar to keep SEO fresh forever."""
     month = datetime.now().month
-    if month > 9: # From October to December, start focusing on NEXT year
+    # If it's late in the year (Oct-Dec), start talking about 2027
+    if month > 9: 
         return random.choice(TAX_LAWS_2027_PREVIEW)
     return random.choice(TAX_LAWS_2026)
 
-# --- 3. CORE LOGIC ---
+# --- 3. AUTOMATION LOGIC ---
 def get_next_keyword():
     if not os.path.exists('keywords.json'):
+        print("Error: keywords.json not found!")
         return None
+        
     with open('keywords.json', 'r+') as f:
         data = json.load(f)
         if not data.get('remaining'):
+            print("No keywords left in 'remaining' list.")
             return None
+        
         kw = data['remaining'].pop(0)
         data.setdefault('used', []).append(kw)
-        f.seek(0); json.dump(data, f, indent=2); f.truncate()
+        
+        f.seek(0)
+        json.dump(data, f, indent=2)
+        f.truncate()
     return kw
 
 def build_monster_block(kw):
@@ -60,33 +67,32 @@ def build_monster_block(kw):
             <span class="text-slate-400 text-xs font-bold uppercase tracking-widest border-l pl-3">OBBB Verified</span>
         </div>
         
-        <h2 class="text-3xl md:text-5xl font-black text-blue-900 mb-6 leading-tight">
-            {kw}: Critical 2026 Filing Analysis
+        <h2 class="text-3xl md:text-5xl font-black text-blue-900 mb-6 tracking-tighter leading-tight">
+            {kw}: Critical 2026 Compliance Update
         </h2>
         
         <div class="prose prose-slate max-w-none text-slate-600 text-lg leading-relaxed">
             <p class="mb-6">
-                Navigating <strong>{kw}</strong> requires a deep understanding of current federal mandates. 
-                As of {timestamp}, our internal audit systems have flagged <strong>{kw}</strong> as a 
-                priority category for high-speed refund processing.
+                Analyzing <strong>{kw}</strong> requires staying current with federal mandates. 
+                As of {timestamp}, our systems have prioritized <strong>{kw}</strong> for 
+                rapid-channel processing to avoid common 2026 audit triggers.
             </p>
             
             <div class="my-8 p-6 bg-blue-50 border-l-8 border-blue-600 rounded-r-xl italic font-medium text-blue-900">
-                "Technical Directive: Implementation of {law_snippet} is now required for all 2026 submissions 
-                to ensure same-day verification and deposit."
+                "Technical Directive: Integration of {law_snippet} is critical for ensuring 
+                immediate refund authorization during the current cycle."
             </div>
 
             <p class="mb-8">
-                By focusing on {kw}, filers can bypass traditional manual review queues. Our direct-file 
-                infrastructure is pre-loaded with the specific logic for {law_snippet}, allowing 
-                your data to move directly to the refund authorization stage.
+                By utilizing our authorized {kw} submission portal, filers can leverage 
+                {law_snippet} to bypass manual review queues. This ensures your data 
+                meets the highest security standards for 2026.
             </p>
 
             <div class="text-center bg-slate-900 p-8 rounded-2xl shadow-2xl">
-                <h3 class="text-white text-2xl font-bold mb-4 uppercase tracking-tighter">Authorized {kw} Submission Portal</h3>
-                <p class="text-slate-400 mb-8">Click below to transmit your 2026 return via the Rapid Refund Network.</p>
+                <h3 class="text-white text-2xl font-bold mb-4 uppercase">Authorized {kw} Portal</h3>
                 <a href="{full_url}" class="inline-block bg-green-500 hover:bg-green-600 text-white text-2xl font-black py-5 px-12 rounded-xl transition transform hover:scale-105">
-                    FILE FOR {kw.upper()} NOW →
+                    CLAIM MY REFUND NOW →
                 </a>
             </div>
         </div>
@@ -95,34 +101,35 @@ def build_monster_block(kw):
 
 def run_automation():
     kw = get_next_keyword()
-    if not kw:
-        print("Tank empty. Add more keywords to keywords.json."); return
+    if not kw: return
 
     new_content = build_monster_block(kw)
     
-    # Update HTML Hub
+    # 1. Update HTML
     with open(TARGET_FILE, "r", encoding="utf-8") as f:
         html = f.read()
     
     marker = ''
     if marker in html:
-        # We inject the NEWEST content at the top so users (and Google) see it first
         updated_html = html.replace(marker, marker + "\n" + new_content)
         with open(TARGET_FILE, "w", encoding="utf-8") as f:
             f.write(updated_html)
     
-    # Update Sitemap for Freshness
+    # 2. Update Sitemap
     now = datetime.now().strftime("%Y-%m-%d")
     sitemap = f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.1"><url><loc>https://brightlane.github.io/</loc><lastmod>{now}</lastmod><priority>1.0</priority></url></urlset>'
     with open(SITEMAP_FILE, "w") as f:
         f.write(sitemap)
 
-    # Emergency Pings
+    # 3. Ping Google/Bing
     sitemap_url = "https://brightlane.github.io/sitemap.xml"
-    requests.get(f"https://www.google.com/ping?sitemap={sitemap_url}")
-    requests.get(f"https://www.bing.com/ping?sitemap={sitemap_url}")
+    try:
+        requests.get(f"https://www.google.com/ping?sitemap={sitemap_url}", timeout=10)
+        requests.get(f"https://www.bing.com/ping?sitemap={sitemap_url}", timeout=10)
+    except:
+        pass
     
-    print(f"✅ Success: {kw} injected with law rotation.")
+    print(f"✅ Success: {kw} deployed.")
 
 if __name__ == "__main__":
     run_automation()
