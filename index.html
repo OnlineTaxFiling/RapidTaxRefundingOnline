@@ -3,42 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IRS Tax Filing Portal 2026 | Secure Maximum Refund</title>
+    <title>Official 2026 Tax Refund Portal | OBBB Compliance Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .urgent-gradient { background: linear-gradient(90deg, #b91c1c 0%, #ef4444 100%); }
-        .hero-bg { background-color: #f8fafc; border-bottom: 4px solid #1e40af; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans">
+<body class="bg-slate-50 text-slate-900">
 
     <div class="urgent-gradient text-white py-3 px-4 sticky top-0 z-50 shadow-lg">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center text-center">
-            <span class="font-bold tracking-wide uppercase">⚠️ FINAL DEADLINE WARNING: APRIL 15TH</span>
+            <span class="font-bold tracking-wide uppercase">⚠️ 2026 FILING DEADLINE: APRIL 15TH</span>
             <div id="countdown" class="font-mono text-xl font-black bg-black/20 px-4 py-1 rounded">00d 00h 00m 00s</div>
             <a href="https://www.linkconnector.com/ta.php?lc=007949054186005142&atid=RapidTaxRoot" class="bg-white text-red-600 px-6 py-1 rounded-full font-bold hover:bg-slate-100 transition shadow-md">FILE NOW</a>
         </div>
     </div>
 
-    <header class="hero-bg py-12 px-6">
+    <header class="py-12 px-6 bg-white border-b-4 border-blue-900">
         <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-4xl md:text-6xl font-extrabold text-blue-900 mb-4">Official 2026 Tax Refund Portal</h1>
-            <p class="text-xl text-slate-600 mb-8">Securely process your OBBB compliance filing and maximize your 2026 refund before the midnight deadline.</p>
+            <h1 class="text-4xl md:text-6xl font-extrabold text-blue-900 mb-4">Rapid Tax Refunding Online</h1>
+            <p class="text-xl text-slate-600 mb-8">Secure your maximum 2026 refund and avoid OBBB late-filing penalties.</p>
             <a href="https://www.linkconnector.com/ta.php?lc=007949054186005142&atid=RapidTaxRoot" class="inline-block bg-green-600 hover:bg-green-700 text-white text-2xl font-bold py-5 px-12 rounded-xl shadow-2xl transform hover:scale-105 transition">
-                START MY REFUND CALCULATION →
+                START MY REFUND →
             </a>
         </div>
     </header>
 
     <main class="max-w-4xl mx-auto py-12 px-6">
-        <div id="dynamic-content" class="prose prose-blue lg:prose-xl max-w-none">
-            <h2 class="text-3xl font-bold text-blue-800">Current Tax Filing Status: ACTIVE</h2>
-            <p>Welcome to the Rapid Tax Refunding Online hub. We are currently processing high volumes of 2026 returns. To ensure your "Information Gain" score remains high for search engines, our automated analysts are providing deep-dive insights below.</p>
-        </div>
+        <div id="dynamic-content">
+            </div>
     </main>
 
     <script>
-        // THE RUNNING CLOCK (Targeting April 15, 2026)
+        // COUNTDOWN TO APRIL 15, 2026
         const deadline = new Date("April 15, 2026 23:59:59").getTime();
         const timer = setInterval(function() {
             const now = new Date().getTime();
@@ -48,8 +45,7 @@
                 let hours = Math.floor((t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 let mins = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
                 let secs = Math.floor((t % (1000 * 60)) / 1000);
-                document.getElementById("countdown").innerHTML = 
-                    days + "d " + hours + "h " + mins + "m " + secs + "s ";
+                document.getElementById("countdown").innerHTML = days + "d " + hours + "h " + mins + "m " + secs + "s ";
             } else {
                 clearInterval(timer);
                 document.getElementById("countdown").innerHTML = "DEADLINE EXPIRED";
